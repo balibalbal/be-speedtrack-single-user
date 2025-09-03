@@ -8,7 +8,7 @@ const { authMiddleware } = require('../middleware/auth');
 router.post('/register', authController.register);
 
 // POST /auth/login - Login user
-router.post('/login', authController.login);
+router.post('/api/login', authController.login);
 
 // POST /auth/logout - Logout user (memerlukan auth)
 router.post('/logout', authMiddleware, authController.logout);

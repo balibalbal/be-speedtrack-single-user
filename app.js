@@ -27,7 +27,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use('/permissions', permissionRoutes);
-app.use('/api/auth', authRoutes); 
+app.use('/auth', authRoutes); 
 app.use('/users', userRoutes);
 app.use('/devices', deviceRoutes);
 app.use('/vehicles', vehicleRoutes);
