@@ -26,13 +26,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
-app.use('/permissions', permissionRoutes);
+app.use('/api/permissions', permissionRoutes);
 app.use('/api/auth', authRoutes); 
-app.use('/users', userRoutes);
-app.use('/devices', deviceRoutes);
-app.use('/vehicles', vehicleRoutes);
-app.use('/histories', historiesRoutes);
-app.use('/traccars', traccarRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/devices', deviceRoutes);
+app.use('/api/vehicles', vehicleRoutes);
+app.use('/api/histories', historiesRoutes);
+app.use('/api/traccars', traccarRoutes);
 
 // Default route
 app.get('/', (req, res) => {
