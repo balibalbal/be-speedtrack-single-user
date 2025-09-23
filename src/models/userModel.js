@@ -21,8 +21,32 @@ const User = {
 
   // Mencari user by email (untuk login)
   getByEmail: async (email) => {
-    const result = await pool.query('SELECT id, name, email, password, user_type, status, akses, settings, created_at FROM users WHERE email = $1', [email]);
-    return result.rows[0];
+    const userQuery = `
+      SELECT 
+        id, name, email, password, user_type, status, akses, settings, created_at
+      FROM users
+      WHERE email = $1
+    `;
+
+    const userResult = await pool.query(userQuery, [email]);
+    if (userResult.rowCount === 0) return null;
+
+    const user = userResult.rows[0];
+
+    // Ambil nama-nama permission sebagai array string
+    const permissionsQuery = `
+      SELECT p.name
+      FROM user_permissions up
+      JOIN permissions p ON p.id = up.permission_id
+      WHERE up.user_id = $1
+    `;
+
+    const permissionsResult = await pool.query(permissionsQuery, [user.id]);
+
+    // Buat array string nama permission saja
+    user.permissions = permissionsResult.rows.map(row => row.name);
+
+    return user;
   },
 
   // Membuat user baru
