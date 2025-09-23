@@ -12,12 +12,29 @@ const User = {
 
   // Mendapatkan user by ID
   getById: async (id) => {
-    const result = await pool.query(
+    // Ambil data user dulu
+    const userResult = await pool.query(
       'SELECT id, name, email, user_type, status, akses, role, is_superuser, settings, created_at FROM users WHERE id = $1', 
       [id]
     );
-    return result.rows[0];
+
+    if (userResult.rowCount === 0) return null;
+
+    const user = userResult.rows[0];
+
+    // Ambil nama permission user sebagai array string
+    const permissionsResult = await pool.query(`
+      SELECT p.name
+      FROM user_permissions up
+      JOIN permissions p ON p.id = up.permission_id
+      WHERE up.user_id = $1
+    `, [id]);
+
+    user.permissions = permissionsResult.rows.map(row => row.name);
+
+    return user;
   },
+
 
   // Mencari user by email (untuk login)
   getByEmail: async (email) => {
